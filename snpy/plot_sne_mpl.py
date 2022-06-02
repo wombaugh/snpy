@@ -46,7 +46,7 @@ class color_dict(dict):
             return 'k'
 
 class symbol_dict(dict):
-   symbols = {'B':'o', 'V':'s','R':'^','I':'D','G':'v','U':'<','Y':'>', 
+   symbols = {'B':'o', 'V':'s','R':'^','I':'D','G':'v','U':'<','Y':'>',
          'J':'p', 'H':'h', 'K':'*'}
    def __contains__(self, key):
       if key[0].upper() in self.symbols:
@@ -71,7 +71,7 @@ class symbol_dict(dict):
 class click_line:
    '''an interactive chord.  Given an axis instance and a start
    point (x0, y0), draw a dynamic chord that follows the mouse
-   until the close() function is called (which returns the 
+   until the close() function is called (which returns the
    coordinates of the final rectangle).'''
 
    def __init__(self, ax, x0, y0):
@@ -197,8 +197,8 @@ class ButtonClick:
    '''Given a figure instance and an optional dictionary of key-bindings,
    oversee the key bindings in a figure.  There are a set of default
    bindings:  x:  select xrange,  y:  select yrange,  b:  select box
-   range, 'm':  mask/unmask data.  These can be overridden using the 
-   bindings keyword.  Simply set it to a dictionary with the button as 
+   range, 'm':  mask/unmask data.  These can be overridden using the
+   bindings keyword.  Simply set it to a dictionary with the button as
    the key and the call-back function as the value.'''
 
    def __init__(self, figure, bindings={}):
@@ -321,18 +321,18 @@ def change_SED(event):
    fig = event.inaxes.figure
    ax = event.inaxes
    if event.key == 'd':
-      if fig.current_day < 70:  
+      if fig.current_day < 70:
          fig.current_day += 1
          ax.set_title('Filter responses + %s SED (day %d)' % \
                (fig.version,fig.current_day))
    elif event.key == 'D':
-      if fig.current_day > -19:  
+      if fig.current_day > -19:
          fig.current_day -= 1
          ax.set_title('Filter responses + %s SED (day %d)' % \
                (fig.version,fig.current_day))
    wave,flux = kcorr.get_SED(fig.current_day, version='H3')
    fig.sed_line.set_data(wave*(1+fig.z), flux/flux.max())
-   if fig.sed_fill is not None:  
+   if fig.sed_fill is not None:
       fig.sed_fill.remove()
       fig.sed_fill = fig.axes[0].fill_between(wave*(1+fig.z), flux/flux.max(),
          facecolor='black', alpha=0.1)
@@ -346,7 +346,7 @@ def plot_filters(self, bands=None, day=0, fill=0, outfile=None):
    only plot those.  Specify which SED to plot using day.'''
    p = pyplot.figure(112)
    p.clear()
-   ax = p.add_subplot(111, 
+   ax = p.add_subplot(111,
          title='Filter responses + %s SED (day %d)' % (self.k_version,day),
          xlabel='Wavelength ($\AA$)', ylabel='Relative Flux',
          autoscale_on=False, ylim=(0,1.1))
@@ -372,7 +372,7 @@ def plot_filters(self, bands=None, day=0, fill=0, outfile=None):
       ax.plot(f1.wave, f1.resp/maxresp, '-', color='blue')
       if fill:
          ax.fill_between(f1.wave, f1.resp/maxresp, facecolor='blue', alpha=0.1)
-      ax.annotate(band, (max_wave,1.05), color='blue', 
+      ax.annotate(band, (max_wave,1.05), color='blue',
             horizontalalignment='center', verticalalignment='center')
       maxresp = maximum.reduce(f2.resp)
       max_wave = f2.wave[argmax(f2.resp)]*(1+self.z)
@@ -415,8 +415,8 @@ def plot_SN_panel(obj, ax, filt, delt, symbol, color, Toff, **kwargs):
    SNR = kwargs.get('SNR_flag', None)
 
    #if not single:
-   #   ax.mylabels.append(ax.text(0.9, 0.9, label, transform=ax.transAxes, 
-   #      horizontalalignment='right', fontsize=kwargs.get('fsize', 12), 
+   #   ax.mylabels.append(ax.text(0.9, 0.9, label, transform=ax.transAxes,
+   #      horizontalalignment='right', fontsize=kwargs.get('fsize', 12),
    #      verticalalignment='top'))
    if kwargs.get('mask', False):
       x = obj.data[filt].MJD[obj.data[filt].mask]
@@ -439,9 +439,9 @@ def plot_SN_panel(obj, ax, filt, delt, symbol, color, Toff, **kwargs):
    label = filt
    if single:
       label = label + '+'+'%.1f' % delt
-      
+
    ax.errorbar(x-Toff, y, yerr=ey, barsabove=True, capsize=0,
-         elinewidth=1, fmt=symbol, ms=msize, 
+         elinewidth=1, fmt=symbol, ms=msize,
          mfc=color, label=label, linestyle='None')
            #ecolor='black')
    if kwargs.get('label_bad', False):
@@ -455,7 +455,7 @@ def plot_SN_panel(obj, ax, filt, delt, symbol, color, Toff, **kwargs):
          ax.plot(x, y, marker='x', mec='red', ms=12, mew=1, linestyle='')
    if not single and SNR is not None:
       cs = ['orange','red']
-      for i in range(2): 
+      for i in range(2):
          gids = less(obj.data[filt].SNR, SNR[i])
          if sometrue(gids):
             x = obj.data[filt].MJD[gids] - Toff
@@ -477,12 +477,12 @@ def plot_SN_panel(obj, ax, filt, delt, symbol, color, Toff, **kwargs):
          else:
             zp = fset[filt].zp
             y = power(10, -0.4*(mag - zp + delt))
-         ax.plot(compress(gids,t-Toff), compress(gids,y), 
+         ax.plot(compress(gids,t-Toff), compress(gids,y),
                color='k', linewidth=linewidth)
-         l = ax.plot(compress(gids,t-Toff), compress(gids,y+err), 
+         l = ax.plot(compress(gids,t-Toff), compress(gids,y+err),
                '--',color='k', linewidth=linewidth, scaley=False)
          #l[0].autoscale=False
-         l = ax.plot(compress(gids,t-Toff), compress(gids,y-err), 
+         l = ax.plot(compress(gids,t-Toff), compress(gids,y-err),
                '--',color='k', linewidth=linewidth, scaley=False)
          #l[0].autoscale=False
    elif obj.data[filt].interp is not None:
@@ -502,10 +502,10 @@ def plot_SN_panel(obj, ax, filt, delt, symbol, color, Toff, **kwargs):
 
 
 def plot_sn(self, **kwargs):
-   '''Plot out the supernova data in a nice format.  There are several 
+   '''Plot out the supernova data in a nice format.  There are several
    options:
       - cols,rows:  Number of columns and rows for panel plot (single=False)
-      - xrange,yrange:  specify the ranges to plot as lists [xmin,xmax], 
+      - xrange,yrange:  specify the ranges to plot as lists [xmin,xmax],
         [ymin,ymax]
       - title:  optional title
       - interactive:  allows for an interactive plot.
@@ -554,7 +554,7 @@ def plot_sn(self, **kwargs):
    filtsep = kwargs.get('filtsep', None)
    combfilt = kwargs.get('combfilt', False)
 
-   if single: 
+   if single:
       grp = False  # Doesn't make sense
    elif filtsep is not None or combfilt:
       grp = True
@@ -578,7 +578,7 @@ def plot_sn(self, **kwargs):
    # overlapping xlabels
    Toff = self.data[bands[0]].MJD.min()
    if epoch:
-      if self.Tmax is None:  
+      if self.Tmax is None:
          Tmax = 0
       else:
          Tmax = self.Tmax
@@ -682,7 +682,7 @@ def plot_sn(self, **kwargs):
       p.xlabel('JD - %d' % Toff)
    p.ylabel(ylabel)
    for ax in p.axes:
-      if flip:  
+      if flip:
          if not ax.yaxis_inverted():  ax.invert_yaxis()
       if xrange is not None:
          ax.set_autoscalex_on(False)
@@ -756,13 +756,15 @@ def plot_sn(self, **kwargs):
          if i < 0:  continue
          plot_SN_panel(oobj, p.axes[i], bands[i], rel_off, 's', 'r', oToff,
                **kwargs)
-   
+
    #p.draw()
    p.set_limits(dox=(xrange is None), doy=(yrange is None), all_equal=1)
-   p.draw()
    outfile = kwargs.get('outfile', None)
    if outfile is not None:
       p.fig.savefig(outfile)
+      p.close()
+   else:
+      p.draw()
    return(p)
 
 def plot_lira(t, t2, t_maxes, BV, eBV, BV2, tmin, tmax, c):
@@ -791,7 +793,7 @@ def plot_sBV(self, t, BV, eBV, tBVmax, etBVmax, ts, ys, eys, Tmax):
 
    ax.errorbar(t-Tmax, BV, yerr=eBV, fmt='o', capsize=0, color='black')
    ax.plot(ts-Tmax, ys, '-', color='blue')
-   ax.fill_between(ts-Tmax, ys-eys, ys+eys, facecolor='blue', alpha=0.2, 
+   ax.fill_between(ts-Tmax, ys-eys, ys+eys, facecolor='blue', alpha=0.2,
          edgecolor='none')
    ax.axvline(tBVmax-Tmax, color='red')
    ax.axvspan(tBVmax-Tmax-etBVmax, tBVmax-Tmax+etBVmax, color='red', alpha=0.5)
@@ -800,7 +802,7 @@ def plot_sBV(self, t, BV, eBV, tBVmax, etBVmax, ts, ys, eys, Tmax):
    return p
 
 
-def plot_color(self, f1, f2, epoch=True, deredden=True, interp=False, 
+def plot_color(self, f1, f2, epoch=True, deredden=True, interp=False,
       dokcorr=False, outfile=None, clear=True):
    '''Plot the color ([f1]-[f2]) evolution curve for the SN.  If  [epoch]
    is True and Bmax is defined, plot relative to T(Bmax).  If [deredden]
@@ -811,7 +813,7 @@ def plot_color(self, f1, f2, epoch=True, deredden=True, interp=False,
    ax.set_xlabel('JD - JD(Bmax)')
    ax.set_ylabel('%s-%s' % (f1,f2))
 
-   MJD,BV,eBV,flag = self.get_color(f1, f2, interp=interp, use_model=0, 
+   MJD,BV,eBV,flag = self.get_color(f1, f2, interp=interp, use_model=0,
          dokcorr=dokcorr)
    if epoch:
       if self.Tmax:
@@ -832,10 +834,10 @@ def plot_color(self, f1, f2, epoch=True, deredden=True, interp=False,
 
    bids = equal(flag, 0)
    rids = equal(flag, 1)
-   ax.errorbar(MJD[bids]-t0, BV[bids], yerr=eBV[bids], fmt='o', capsize=0, 
+   ax.errorbar(MJD[bids]-t0, BV[bids], yerr=eBV[bids], fmt='o', capsize=0,
          color='black', label='obs')
    if sometrue(rids):
-      ax.errorbar(MJD[rids]-t0, BV[rids], yerr=eBV[rids], fmt='o', capsize=0, 
+      ax.errorbar(MJD[rids]-t0, BV[rids], yerr=eBV[rids], fmt='o', capsize=0,
          color='red', mfc='red', label='inter')
    ax.legend(prop={'size':12})
    pyplot.tight_layout()
@@ -853,7 +855,7 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
          if mp is not None:
             if getattr(mp, 'bc',None) is not None:
                mp.bc.disconnect()
-   if flux: 
+   if flux:
       flipaxis = 0
    else:
       flipaxis = 1
@@ -892,7 +894,7 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
 
    self.mp.xlabel('Epoch (days)')
    self.mp.title('%s %s lightcurve\n' % (self.parent.name, self.band))
-      
+
    if flux:
       y = self.flux
       ey = self.e_flux
@@ -900,12 +902,12 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
       y = self.mag
       ey = self.e_mag
    # Plot the actual data (in the top panel)
-   p.errorbar(self.MJD - epoch*Tmax, y, yerr=ey, barsabove=True, 
+   p.errorbar(self.MJD - epoch*Tmax, y, yerr=ey, barsabove=True,
          capsize=0, elinewidth=1, fmt='o', mfc='blue', linestyle='None',
            ecolor='black', picker=True)
    if not alltrue(self.mask):
       # Plot any masked out data s red filled symbols
-      p._x, = p.plot(self.MJD[~self.mask] - epoch*Tmax, y[~self.mask], 'o', 
+      p._x, = p.plot(self.MJD[~self.mask] - epoch*Tmax, y[~self.mask], 'o',
             color='red')
    else:
       p._x = None
@@ -918,7 +920,7 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
       m_m,m_em,m_mask = self.parent.model(self.band, self.MJD)
       x = self.MJD
       if flux and self.parent.model.model_in_mags:
-         p._model = p.plot(t[mask]-epoch*Tmax, power(10, -0.4*(m[mask]-self.filter.zp)), 
+         p._model = p.plot(t[mask]-epoch*Tmax, power(10, -0.4*(m[mask]-self.filter.zp)),
                '-', color='black')[0]
          y = self.flux - power(10,-0.4*(m_m - self.filter.zp))
          dy = self.e_flux
@@ -942,7 +944,7 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
             mfc='blue', capsize=0, elinewidth=1, barsabove=True, ecolor='black',
             picker=True)
       if not alltrue(self.mask):
-         p2._x, = p2.plot(x[~self.mask] - epoch*Tmax, y[~self.mask], 'o', 
+         p2._x, = p2.plot(x[~self.mask] - epoch*Tmax, y[~self.mask], 'o',
                color='red')
       else:
          p2._x = None
@@ -958,7 +960,7 @@ def plot_lc(self, epoch=1, flux=0, symbol=4, outfile=None, use_model=True):
       m,mask = self.eval(t, t_tol=-1)
       m_model,m_mask = self.eval(self.MJD, t_tol=-1)
       if flux:
-         p._model = p.plot(compress(mask,t - epoch*Tmax), 
+         p._model = p.plot(compress(mask,t - epoch*Tmax),
                 compress(mask, power(10, -0.4*(m - self.filter.zp))),'-',
                 color='black')[0]
          x = self.MJD
@@ -1035,7 +1037,7 @@ def replot_lc(self):
    else:
       Tmax = 0
    if p.flux:
-      p._model = p.plot(compress(mask,t - epoch*Tmax), 
+      p._model = p.plot(compress(mask,t - epoch*Tmax),
              compress(mask, power(10, -0.4*(m - self.filter.zp))),'-',
              color='black')[0]
       x = self.MJD
@@ -1053,7 +1055,7 @@ def replot_lc(self):
       capsize=0, elinewidth=1, fmt='o', mfc='blue', linestyle='None',
       ecolor='black')
    if not alltrue(self.mask):
-      p._x, = p.plot(self.MJD[~self.mask] - epoch*Tmax, yy[~self.mask], 'o', 
+      p._x, = p.plot(self.MJD[~self.mask] - epoch*Tmax, yy[~self.mask], 'o',
             color='red')
       p2._x, = p2.plot(x[~self.mask] - epoch*Tmax, y[~self.mask], 'o',
             color='red')
@@ -1061,10 +1063,10 @@ def replot_lc(self):
       p._x = None
       p2._x = None
    if p.flux:
-      p2.set_ylim(y[self.mask*m_mask].min(), 
+      p2.set_ylim(y[self.mask*m_mask].min(),
             y[self.mask*m_mask].max())
    else:
-      p2.set_ylim(y[self.mask*m_mask].max(), 
+      p2.set_ylim(y[self.mask*m_mask].max(),
             y[self.mask*m_mask].min())
    self.mp.fig.canvas.draw()
 
@@ -1085,10 +1087,10 @@ def plot_kcorrs(self, colors=None, symbols=None, outfile=None):
    eff_wavs = asarray(eff_wavs)
    ids = argsort(eff_wavs)
    bands = [bands[i] for i in ids]
-      
+
    n_plots = len(bands)
    p = myplotlib.PanelPlot(1, n_plots, num=112, figsize=(6,n_plots))
-        
+
    p.title("Use 'm' to plot mangled SED for any point")
    p.xlabel('Epoch (days)')
    p.ylabel('K-corrections')
@@ -1099,13 +1101,13 @@ def plot_kcorrs(self, colors=None, symbols=None, outfile=None):
       x = self.data[b].MJD - self.Tmax
       days = (arange(int(x[0]), int(x[-1]), 1)) #/(1+self.z)/self.ks_s
       rest_days = days/(1+self.z)/self.ks_s
-      k,k_m = list(map(array, kcorr.kcorr(rest_days.tolist(), self.restbands[b], 
+      k,k_m = list(map(array, kcorr.kcorr(rest_days.tolist(), self.restbands[b],
          b, self.z, self.EBVgal, 0.0, version=self.k_version)))
       k_m = equal(k_m, 1)
       p.axes[i].filt = b
       p.axes[i].inst = self
       p.axes[i].plot(days[k_m],k[k_m], '-', color=colors[b])
-      p.axes[i].plot(x[self.ks_mask[b]], self.ks[b][self.ks_mask[b]], 
+      p.axes[i].plot(x[self.ks_mask[b]], self.ks[b][self.ks_mask[b]],
             symbols[b], color=colors[b])
       p.axes[i].text(0.9, 0.9, b, transform=p.axes[i].transAxes,
             verticalalignment='top', horizontalalignment='right')
@@ -1135,7 +1137,7 @@ def plot_mangled_SED(event):
    ax.plot(wave,flux, label='Original SED', color='black')
    if band in self.ks_mopts:
       if 'state' in self.ks_mopts[band][id]:
-         man_flux = mangle_spectrum.apply_mangle(wave,flux, 
+         man_flux = mangle_spectrum.apply_mangle(wave,flux,
                **self.ks_mopts[band][id])[0]
       else:
          args = {}
@@ -1150,7 +1152,7 @@ def plot_mangled_SED(event):
    f1 = fset[band]
    f2 = fset[self.restbands[band]]
    ax.plot(f1.wave, f1.resp/f1.resp.max()*ax.get_ylim()[1], color='red')
-   ax.plot(f2.wave*(1+self.z), f2.resp/f2.resp.max()*ax.get_ylim()[1], 
+   ax.plot(f2.wave*(1+self.z), f2.resp/f2.resp.max()*ax.get_ylim()[1],
          color='blue')
    #wmax = max(f1.wave.max(), f2.wave.max()*(1+self.z))
    #wmin = max(f1.wave.min(), f2.wave.min()*(1+self.z))
@@ -1193,7 +1195,7 @@ def draw_lc_params(self, ax):
       t = ax.axhline(self.Mmax + self.dm15, color='0.5');  self._lc_labs.append(t)
       self._lc_labs.append(t)
       t = ax.text(self.Tmax+15*(1+self.parent.z), self.Mmax+self.dm15+0.1,
-         "$\Delta m_{15} = %.2f$" % self.dm15, va='top', ha='right', 
+         "$\Delta m_{15} = %.2f$" % self.dm15, va='top', ha='right',
          color='0.5')
       self._lc_labs.append(t)
 
@@ -1217,4 +1219,3 @@ def launch_int_fit(self, fitflux=False):
    mfit.bind_help.append(('c','(re)compute light-curve parameters'))
    mfit.draw()
    return mfit
-
